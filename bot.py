@@ -3,6 +3,7 @@ import time
 import telebot
 import random
 import tensorflow as tf
+from telebot import types
 
 API_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 
@@ -14,8 +15,8 @@ rps_list = ['Rock', 'Paper', 'Scissors']
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
     bot.reply_to(message, """\
-Hi there, I am EchoBot.
-I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
+Hi there, I am Rock Paper Scissors Bot.
+I am here to play Rock Paper Scissors with you! Send '/play' and show your hand to the camera.\
 """)
 
 
@@ -38,6 +39,11 @@ def play(message):
         bot.send_message(message.chat.id, 'You win!')
     elif(result == 2):
         bot.send_message(message.chat.id, "It's a draw!")
+
+    markup = types.ReplyKeyboardMarkup(row_width=1)
+    playbtn = types.KeyboardButton('/play')
+    markup.add(playbtn)
+    bot.send_message(message.chat.id, "Play again?", reply_markup=markup)
         
 
 def check_win(c1, c2):
@@ -53,7 +59,7 @@ def check_win(c1, c2):
         return 0
     elif(c1 == 'Scissors' and c2 == 'Rock'):
         return 0
-    elif(c2 == 'Scissors' and c2 == 'Paper'):
+    elif(c1 == 'Scissors' and c2 == 'Paper'):
         return 1
 
         
